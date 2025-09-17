@@ -1,309 +1,489 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlaw Bangladeshi SMP</title>
-  <style>
-    :root {
-      --purple: #7d3cff;
-      --green: #32d296;
-      --white: #ffffff;
-      --dark: #121212;
-      --gray: #f4f4f4;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Outlaw Bangladeshi SMP</title>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<!-- Minimal, modern UI with glass cards, gradients, and subtle motion -->
+<style>
+  :root{
+    --purple:#4d68df;
+    --green:#203a2e;
+    --white:#b0ebbd;
+    --bg:#bfd0f0;
+    --muted:#6b6b6b;
+    --glass: rgba(255,255,255,0.55);
+    --glass-2: rgba(255,255,255,0.75);
+    --card-shadow: 0 10px 30px rgba(15,15,25,0.08);
+    --soft-shadow: 0 6px 20px rgba(15,15,25,0.06);
+    --max-width:1200px;
+    --radius:14px;
+    --ff: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+  }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--white);
-      color: var(--dark);
-      line-height: 1.6;
-    }
+  /* reset & base */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:var(--ff);
+    background:var(--bg);
+    color:#111;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+    transition:all .45s ease, color .45s ease;
+  }
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 15px 20px;
-      border-bottom: 3px solid var(--green);
-      background: var(--white);
-    }
+  /* dark mode */
+  body.theme-dark{
+    background:linear-gradient(180deg,#0f1226,#0b0e18);
+    color:#e9eef8;
+  }
 
-    header img {
-      height: 55px;
-      width: 55px;
-      border-radius: 50%; /* Round */
-      object-fit: cover;
-      margin-right: 12px;
-    }
+  /* page container */
+  .wrap{max-width:var(--max-width);margin:36px auto;padding:0 20px}
 
-    header h1 {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: var(--purple);
-    }
+  /* top nav / header */
+  .topbar{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .brand{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    text-decoration:none;
+  }
+  .brand img{
+    width:64px;height:64px;border-radius:50%;object-fit:cover;
+    box-shadow:var(--card-shadow);
+    transition:transform .6s cubic-bezier(.2,.9,.2,1), filter .3s;
+  }
+  .brand h1{
+    margin:0;font-size:1.15rem;color:var(--purple);letter-spacing:.3px;
+  }
+  nav{display:flex;gap:12px;align-items:center}
+  .nav-link{
+    color:var(--muted);
+    background:transparent;border:none;padding:8px 12px;border-radius:10px;
+    cursor:pointer;font-weight:600;
+    transition:all .18s ease;
+  }
+  .nav-link:hover{ transform:translateY(-3px); color:var(--purple) }
 
-    /* Hero Section */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, var(--purple), var(--green));
-      color: var(--white);
-      text-align: center;
-    }
+  /* actions */
+  .actions{display:flex;gap:10px;align-items:center}
+  .btn{
+    border:0;padding:10px 16px;border-radius:12px;font-weight:700;cursor:pointer;
+    display:inline-flex;gap:8px;align-items:center;justify-content:center;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-ghost{ background:transparent;color:var(--purple);border:1px solid rgba(125,60,255,0.15) }
+  .btn-primary{
+    background: linear-gradient(135deg,var(--purple),var(--green));
+    color:white; box-shadow: 0 8px 30px rgba(125,60,255,0.12);
+  }
+  .btn:active{ transform:translateY(1px) }
 
-    .hero h2 {
-      font-size: 3rem;
-      margin-bottom: 15px;
-    }
+  /* hero */
+  .hero{
+    margin-top:6px;
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:24px;
+    align-items:stretch;
+  }
+  @media(max-width:980px){ .hero{ grid-template-columns: 1fr; } }
 
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 25px;
-    }
+  .hero-card{
+    background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.55));
+    border-radius:var(--radius);
+    padding:34px;
+    box-shadow:var(--card-shadow);
+    backdrop-filter: blur(6px) saturate(120%);
+    position:relative;
+    overflow:hidden;
+  }
 
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
+  .hero-title{ font-size:2.4rem;margin:0 0 8px;color:var(--purple); }
+  .hero-sub{ margin:0 0 18px;color:#222; font-weight:600; opacity:.88 }
+  body.theme-dark .hero-card{ background: linear-gradient(180deg, rgba(20,22,36,.5), rgba(20,22,36,.38)); }
 
-    .btn-join {
-      background: var(--white);
-      color: var(--purple);
-      font-weight: bold;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  /* IP row */
+  .ip-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+  .ip-box{
+    padding:12px 16px;border-radius:10px;background:var(--glass-2);border:1px solid rgba(0,0,0,0.04);
+    display:inline-flex;gap:8px;align-items:center;font-weight:700;color:#222;
+  }
+  body.theme-dark .ip-box{ background: rgba(255,255,255,0.03); color:#e6eef8 }
 
-    .btn-join:hover {
-      background: var(--green);
-      color: var(--white);
-      transform: scale(1.05);
-    }
+  .copy {
+    background:transparent;border:1px solid rgba(0,0,0,0.06); padding:8px;border-radius:10px; cursor:pointer;
+  }
+  .copy:hover{ transform:translateY(-3px) }
 
-    /* Sections */
-    section {
-      padding: 50px 20px;
-      text-align: center;
-    }
+  /* small stats under hero */
+  .stats{ display:flex; gap:12px; margin-top:18px; flex-wrap:wrap }
+  .stat{
+    background:var(--white);padding:12px;border-radius:12px;min-width:120px;text-align:center;box-shadow:var(--soft-shadow);
+  }
+  body.theme-dark .stat{ background: rgba(255,255,255,0.03) }
 
-    .features {
-      background: var(--gray);
-    }
+  /* right-side quick card */
+  .card-side{
+    background: linear-gradient(135deg,var(--purple),var(--green));
+    color:white;border-radius:14px;padding:20px;box-shadow:0 12px 40px rgba(50,0,120,0.12);
+    display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;
+  }
+  .card-side p{ margin:0;opacity:0.96; font-weight:700 }
 
-    .features h2,
-    .team h2,
-    .join h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      color: var(--purple);
-    }
+  /* features grid */
+  .features{ margin-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
+  @media(max-width:980px){ .features{ grid-template-columns:repeat(1,1fr) } }
 
-    .feature-list,
-    .team-grid,
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+  .feature{
+    background:var(--white); padding:20px;border-radius:12px; box-shadow:var(--soft-shadow);
+    transition: transform .18s ease, box-shadow .18s;
+  }
+  .feature:hover{ transform:translateY(-8px); box-shadow: 0 16px 40px rgba(15,15,25,0.12) }
+  .feature h3{ margin:0 0 8px;color:var(--green) }
 
-    .feature,
-    .card,
-    .step {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+  /* team grid */
+  .team{ margin-top:28px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px }
+  @media(max-width:980px){ .team{ grid-template-columns:repeat(2,1fr) } @media(max-width:520px){ .team{ grid-template-columns:1fr } } }
 
-    .feature h3,
-    .card h3,
-    .step h3 {
-      color: var(--green);
-      margin-bottom: 10px;
-    }
+  .member{ background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.92)); padding:16px;border-radius:12px; text-align:center; box-shadow:var(--soft-shadow) }
+  .member img{ width:68px;height:68px;border-radius:50%;object-fit:cover;margin-bottom:8px; box-shadow: 0 8px 20px rgba(18,18,30,0.06) }
+  body.theme-dark .member{ background: rgba(255,255,255,0.02) }
 
-    /* Tutorial Step Style */
-    .step ul {
-      list-style: none;
-      text-align: left;
-      padding: 0;
-    }
+  /* accordion tutorial (accessible) */
+  .accordion{ margin-top:28px; background:transparent }
+  details{ background:var(--white);padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:var(--soft-shadow) }
+  details summary{ font-weight:800; font-size:1.05rem; cursor:pointer; color:var(--purple) }
+  details[open]{ background:#fbfbfd }
+  .steps{ padding-top:12px; display:grid; gap:10px }
+  .step-list{ list-style:none; padding:0; margin:6px 0 0; color:var(--muted) }
+  .step-list li{ padding:6px 0 }
 
-    .step ul li {
-      margin: 8px 0;
-      font-size: 1rem;
-    }
+  /* embedded video placeholder / lazy iframe */
+  .video-placeholder{ width:100%; padding-top:56.25%; position:relative; border-radius:10px; overflow:hidden; background:linear-gradient(135deg,#eee,#fff) }
+  .video-placeholder img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+  .video-placeholder button{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); background:var(--gradient); color:white;border:0;padding:12px 18px;border-radius:10px; cursor:pointer }
 
-    .step ul li b {
-      color: var(--purple);
-    }
+  /* footer */
+  footer{ text-align:center;padding:28px 16px;margin-top:36px;border-radius:12px;color:var(--white); background:linear-gradient(135deg,var(--purple),var(--green)); box-shadow: var(--card-shadow) }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: var(--purple);
-      color: var(--white);
-      margin-top: 40px;
-    }
+  /* subtle micro-animations */
+  .pulse { animation: pulse 2.6s infinite }
+  @keyframes pulse{ 0%{ transform:scale(1); box-shadow:0 8px 30px rgba(125,60,255,0.08) } 50%{ transform:scale(1.02) } 100%{ transform:scale(1) } }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.4rem;
-      }
+  /* tasteful floating decor (animated but light) */
+  .decor { position:absolute; border-radius:12px; filter:blur(18px); opacity:.08; pointer-events:none }
+  .decor--1{ width:420px;height:240px;right:-60px;top:-40px;background:linear-gradient(90deg,rgba(125,60,255,0.9),rgba(50,210,150,0.9)); transform:rotate(12deg); animation:floaty 9s ease-in-out infinite }
+  .decor--2{ width:260px;height:160px;left:-40px;bottom:-30px;background:linear-gradient(90deg,rgba(50,210,150,0.85),rgba(125,60,255,0.85)); transform:rotate(-15deg); animation:floaty 12s ease-in-out infinite }
+  @keyframes floaty{ 0%{ transform:translateY(0) } 50%{ transform:translateY(10px) } 100%{ transform:translateY(0) } }
 
-      .hero h2 {
-        font-size: 2.2rem;
-      }
+  /* day/night helper */
+  .mode-indicator{ font-weight:900; padding:6px 10px;border-radius:10px;background:rgba(255,255,255,0.9); color:var(--purple) }
 
-      .hero p {
-        font-size: 1rem;
-      }
-
-      header img {
-        height: 45px;
-        width: 45px;
-      }
-    }
-  </style>
+  /* responsive tweaks */
+  @media(max-width:720px){
+    .brand img{ width:48px;height:48px }
+    .hero-title{ font-size:1.5rem }
+    .hero{ grid-template-columns:1fr; gap:16px }
+    .card-side{ order:2 }
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <img src="/logo.PNG" alt="Outlaw SMP Logo">
-    <h1>Outlaw SMP</h1>
-  </header>
+<div class="wrap">
+  <!-- decorative blurred gradients -->
+  <div class="decor decor--1" aria-hidden="true"></div>
+  <div class="decor decor--2" aria-hidden="true"></div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h2>Welcome to Outlaw SMP</h2>
-    <h2>Season 1</h2>
-    <p>Join our amazing Minecraft 1.21.2 survival server today!</p>
-    <div class="btn-group">
-      <button class="btn-join" onclick="copyIP()">Copy Java IP</button>
-      <a href="minecraft://?addExternalServer=Outlaw%20Bangladeshi%20SMP|nihal_yt78.aternos.me:25213">
-        <button class="btn-join">Join on Bedrock</button>
-      </a>
+  <!-- HEADER -->
+  <div class="topbar" role="banner" aria-label="site header">
+    <a class="brand" href="#">
+      <img src="/logo.PNG" alt="Outlaw SMP logo" id="site-logo">
+      <div>
+        <h1>Outlaw SMP</h1>
+        <h1>Season 1</h1>
+        <div style="font-size:.82rem;color:var(--muted)"> AFriendly Bangladeshi Minecraft SMP</div>
+      </div>
+    </a>
+
+    <nav role="navigation" aria-label="main navigation">
+      <button class="nav-link" onclick="scrollToSection('features')">Features</button>
+      <button class="nav-link" onclick="scrollToSection('team')">Team</button>
+      <button class="nav-link" onclick="scrollToSection('join')">How to Join</button>
+    </nav>
+
+    <div class="actions">
+      <div class="mode-indicator" id="mode-indicator">Day</div>
+      <button class="btn btn-ghost" id="pause-btn" title="Pause animations">Pause Anim</button>
+      <button class="btn btn-primary" onclick="copyIP()" title="Copy server IP">Copy IP For Java </button>
     </div>
-    <p style="margin-top:15px;">Server IP: <strong>nihal_yt78.aternos.me</strong></p>
-    <p style="margin-top:15px;">Server PORT: <strong>25213</strong></p>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-card" style="min-height:240px;">
+      <h2 class="hero-title">Welcome to Outlaw  SMP</h2>
+      <p class="hero-sub">Asurvival SMP — for Java & Bedrock. Join community, build, and play.</p>
+
+      <div class="ip-row" style="margin-bottom:14px">
+        <div class="ip-box" aria-live="polite" id="server-ip">nihal_yt78.aternos.me:25213</div>
+        <button class="copy btn-ghost" onclick="copyIP()" aria-label="Copy server ip">Copy Java IP</button>
+        <a class="btn btn-ghost" href="minecraft://?addExternalServer=Outlaw%20SMP|nihal_yt78.aternos.me:25213" title="Join on Bedrock">Join on Bedrock</a>
+        <!-- <a class="btn btn-ghost" href="#" onclick="openDiscord()">Whatsapp</a> -->
+      </div>
+
+      <div class="stats" aria-hidden="true">
+        <div class="stat">
+          <div style="font-weight:800;font-size:1.15rem">12</div>
+          <div style="font-size:.85rem;color:var(--muted)">Players</div>
+        </div>
+        <div class="stat">
+          <div style="font-weight:800;font-size:1.15rem">24/7</div>
+          <div style="font-size:.85rem;color:var(--muted)">Uptime</div>
+        </div>
+        <div class="stat">
+          <div style="font-weight:800;font-size:1.15rem">Events</div>
+          <div style="font-size:.85rem;color:var(--muted)">Weekly</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="card-side" aria-hidden="false" style="min-height:240px; align-self:center;">
+      <p style="font-size:1.15rem">Quick Join</p>
+      <p style="font-size:1.5rem;font-weight:900">nihal_yt78.aternos.me</p>
+      <div style="font-weight:700;opacity:.95">Port: 25213</div>
+
+      <div style="margin-top:12px; display:flex;gap:8px">
+        <a class="btn btn-primary" href="minecraft://?addExternalServer=Outlaw%20SMP|nihal_yt78.aternos.me:25213">Join Bedrock</a>
+        <button class="btn btn-ghost" style="color:white;border: #dddddd;" onclick="copyIP()">Copy IP</button>
+      </div>
+    </aside>
   </section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <h2>Server Features</h2>
-    <div class="feature-list">
+  <!-- FEATURES -->
+  <section id="features">
+    <h2 style="margin-bottom:8px">Server Features</h2>
+    <div class="features">
       <div class="feature">
-        <h3>⚔ Survival</h3>
-        <p>Enjoy a balanced survival experience with friends.</p>
+        <h3>⚔ Balanced Survival</h3>
+        <p>Vanilla-like mechanics with quality-of-life improvements for fair play.</p>
       </div>
       <div class="feature">
-        <h3>🏰 Builds</h3>
-        <p>Showcase your creativity with epic builds.</p>
+        <h3>🏰 Creative Builds</h3>
+        <p>Community projects, competitions, and custom plots.</p>
       </div>
       <div class="feature">
         <h3>⚡ Active Community</h3>
-        <p>Friendly Bangladeshi players, events & fun.</p>
-      </div>
-      <div class="feature">
-        <h3>🛡 Admin Support</h3>
-        <p>Admins and devs always ready to help.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Admins & Developers -->
-  <section class="team">
-    <h2>Admins & Developers</h2>
-    <div class="team-grid">
-      <div class="card">
-        <h3>👑 Nihal_YT78</h3>
-        <p>Owner / Admin</p>
-      </div>
-      <div class="card">
-        <h3>⚙️ Nihal_YT78</h3>
-        <p>Developer</p>
-      </div>
-      <div class="card">
-        <h3>🛡 Nihal_YT78</h3>
-        <p>Admin</p>
-      </div>
-      <div class="card">
-        <h3>🎨 Nihal_YT78</h3>
-        <p>Builder / Dev</p>
+        <p>Events, friendly players, and support across timezones.</p>
+      </div><div class="feature">
+        <h3>🎁 Vanila Minecraft </h3>
+        <p> Enjoy the vanila minecraft with your friends</p>
+      </div><div class="feature">
+        <h3>🎢 Many primum features</h3>
+        <p>Lot of primum features with vanila minecraft to increase exprience</p>
+      </div><div class="feature">
+        <h3>🎖 Weekly tournaments</h3>
+        <p>Weekly helding tournaments for grinding</p>
       </div>
     </div>
   </section>
 
-  <!-- Join Process -->
-  <section class="join">
-    <h2>How to Join</h2>
-    <div class="steps">
-      <div class="step">
-        <h3>Java Edition (PC)</h3>
-        <ul>
-          <li>1. Open <b>Minecraft Java Edition</b></li>
-          <li>2. Go to <b>Multiplayer</b></li>
-          <li>3. Click <b>Add Server</b></li>
-          <li>4. Enter IP: <b>nihal_yt78.aternos.me:25213</b></li>
-          <li>5. Click <b>Join</b></li>
-        </ul>
+  <!-- TEAM -->
+  <section id="team">
+    <h2 style="margin-bottom:8px">Admins & Developers</h2>
+    <div class="team">
+      <div class="member">
+        <img src="/nihal.PNG" alt="Nihal avatar">
+        <div style="font-weight:800">👑 Nihal_YT78</div>
+        <div style="color:var(--muted)">Owner / Admin</div>
       </div>
-      <div class="step">
-        <h3>Bedrock Edition (Windows 10 / Console)</h3>
-        <ul>
-          <li>1. Open <b>Minecraft Bedrock</b></li>
-          <li>2. Go to <b>Play → Servers → Add Server</b></li>
-          <li>3. Name: <b>Outlaw SMP</b></li>
-          <li>4. Server IP: <b>nihal_yt78.aternos.me</b></li>
-          <li>5. Port: <b>25213</b></li>
-          <li>6. Click <b>Join Server</b></li>
-        </ul>
+      <div class="member">
+        <img src="/muntahi.JPG" alt="Muntahi avatar">
+        <div style="font-weight:800">⚙️ Muntahi</div>
+        <div style="color:var(--muted)">Developer</div>
       </div>
-      <div class="step">
-        <h3>Pocket Edition (Mobile)</h3>
-        <ul>
-          <li>1. Open <b>Minecraft Pocket Edition</b></li>
-          <li>2. Tap <b>Play → Servers → Add Server</b></li>
-          <li>3. Name: <b>Outlaw SMP</b></li>
-          <li>4. Server IP: <b>nihal_yt78.aternos.me</b></li>
-          <li>5. Port: <b>25213</b></li>
-          <li>6. Tap <b>Join</b></li>
-        </ul>
+      <div class="member">
+        <img src="logo.png" alt="Rakib avatar">
+        <div style="font-weight:800">🛡 Unknown</div>
+        <div style="color:var(--muted)">Admin</div>
+      </div>
+      <div class="member">
+        <img src="logo.png" alt="Adnan avatar">
+        <div style="font-weight:800">🎨 Unknown</div>
+        <div style="color:var(--muted)">Builder / Dev</div>
       </div>
     </div>
   </section>
 
-  <footer>
-    Made with ❤️ for the Outlaw Bangladeshi SMP community
+  <!-- JOIN / TUTORIALS -->
+  <section id="join">
+    <h2 style="margin-bottom:8px">How to Join — Tutorials</h2>
+
+    <!-- accessible accordion using details (native keyboard support) -->
+    <div class="accordion" role="region" aria-label="Join tutorials">
+      <details>
+        <summary>💻 Java Edition (PC)</summary>
+        <div class="steps">
+          <ol class="step-list">
+            <li>Open <strong>Minecraft Java Edition</strong></li>
+            <li>Go to <strong>Multiplayer → Add Server</strong></li>
+            <li>Enter IP: <strong>nihal_yt78.aternos.me:25213</strong></li>
+            <li>Click <strong>Join</strong></li>
+          </ol>
+
+          <!-- lazy video placeholder - load on click for perf -->
+          <div class="video-placeholder" data-src="https://www.youtube.com/embed/v742mHlrW4g" aria-hidden="false">
+            <img src="https://i.ytimg.com/vi/j0m5vDRk5Qk/maxresdefault.jpg" alt="Java tutorial thumbnail (replace)">
+            <button onclick="loadVideo(this)">▶ Watch</button>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>🎮 Bedrock Edition (Windows / Console)</summary>
+        <div class="steps">
+          <ol class="step-list">
+            <li>Open <strong>Minecraft Bedrock</strong></li>
+            <li>Play → Servers → Add Server</li>
+            <li>Name: <strong>Outlaw SMP</strong></li>
+            <li>Server IP: <strong>nihal_yt78.aternos.me</strong> Port: <strong>25213</strong></li>
+          </ol>
+
+          <div class="video-placeholder" data-src="https://www.youtube.com/embed/qTHks581I38">
+            <img src="https://i.ytimg.com/vi/TKBfKSdfnJw/maxresdefault.jpg" alt="Bedrock tutorial thumbnail (replace)">
+            <button onclick="loadVideo(this)">▶ Watch</button>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>📱 Pocket Edition (Mobile)</summary>
+        <div class="steps">
+          <ol class="step-list">
+            <li>Open <strong>Minecraft PE</strong></li>
+            <li>Play → Servers → Add Server</li>
+            <li>Name: <strong>Outlaw SMP</strong></li>
+            <li>IP: <strong>nihal_yt78.aternos.me</strong> Port: <strong>25213</strong></li>
+          </ol>
+
+          <div class="video-placeholder" data-src="https://www.youtube.com/embed/qTHks581I38">
+            <img src="https://i.ytimg.com/vi/awsl2mFcJls/maxresdefault.jpg" alt="Pocket tutorial thumbnail (replace)">
+            <button onclick="loadVideo(this)">▶ Watch</button>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer role="contentinfo">
+    <div style="font-weight:800">Outlaw Bangladeshi SMP</div>
+    <div style="opacity:.9;margin-top:6px">Made with ❤️ for the community</div>
   </footer>
+</div>
 
-  <script>
-    function copyIP() {
-      navigator.clipboard.writeText("nihal_yt78.aternos.me:25213");
-      alert("Java Server IP copied to clipboard!");
+<!-- SCRIPT: interactions, lazy video loading, theme toggle, small animated decor pause -->
+<script>
+  // Copy IP (friendly feedback)
+  function copyIP(){
+    const ip = document.getElementById('server-ip').textContent.trim();
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(ip).then(()=> alert('Copied IP: '+ip));
+    }else{
+      prompt('Copy server IP', ip);
     }
-  </script>
+  }
 
+  // Scroll helper
+  function scrollToSection(id){
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  // Open Discord (placeholder)
+  function openDiscord(){
+    // Replace WITH your Discord invite link
+    window.open('https://discord.gg/your-invite', '_blank');
+  }
+
+  // Lazy-load YouTube: convert placeholder to iframe
+  function loadVideo(button){
+    const container = button.closest('.video-placeholder');
+    if(!container) return;
+    const src = container.dataset.src;
+    if(!src) return;
+    // create iframe lazily (adds modest performance)
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('allowfullscreen','');
+    iframe.setAttribute('loading','lazy');
+    iframe.setAttribute('referrerpolicy','no-referrer');
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.position = 'absolute';
+    iframe.style.inset = '0';
+    iframe.src = src + '?autoplay=1';
+    // remove children and inject iframe
+    container.innerHTML = '';
+    container.appendChild(iframe);
+  }
+
+  // Theme toggle & animations pause
+  (function(){
+    const pauseBtn = document.getElementById('pause-btn');
+    const modeIndicator = document.getElementById('mode-indicator');
+    let animationsPaused = false;
+    pauseBtn.addEventListener('click', ()=>{
+      animationsPaused = !animationsPaused;
+      document.querySelectorAll('.decor').forEach(el=>{
+        el.style.animationPlayState = animationsPaused ? 'paused' : 'running';
+      });
+      pauseBtn.textContent = animationsPaused ? 'Resume Anim' : 'Pause Anim';
+    });
+
+    // day/night toggle via primary keyboard / indicator
+    let dark = false;
+    const toggleElem = document.querySelector('.btn-ghost');
+    const modeBtn = document.querySelector('.mode-indicator');
+    // also let double-click on logo toggle theme (power user)
+    document.getElementById('site-logo').addEventListener('dblclick', toggleTheme);
+
+    function toggleTheme(){
+      dark = !dark;
+      document.body.classList.toggle('theme-dark', dark);
+      modeIndicator.textContent = dark ? 'Night' : 'Day';
+    }
+
+    // detect device and auto-open relevant detail
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if(isMobile){
+        // open Pocket by default
+        document.querySelectorAll('details')[2]?.setAttribute('open','');
+      } else {
+        // open Java by default
+        document.querySelectorAll('details')[0]?.setAttribute('open','');
+      }
+    });
+
+    // Improve keyboard accessibility (enter toggles details)
+    document.querySelectorAll('details summary').forEach(s=>{
+      s.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); s.parentElement.toggleAttribute('open'); }
+      });
+    });
+  })();
+</script>
 </body>
 </html>
-
-
-
-
